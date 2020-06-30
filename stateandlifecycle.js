@@ -1,4 +1,3 @@
-//The primary difference between functional and class components is the availability of State. 
 
 //What is state?
 
@@ -66,6 +65,45 @@
 //3. Props are set by the parent component and State s updated by event handlers. 
 
 // The state of a component should exist throughout the liefetime hence we require an inital state: for that we require a constructor which consists of state. 
+
+      //    //Source: //https://www.youtube.com/watch?v=IYvD9oBCuJI
+    
+    //In React, the idea is that when state is modified, the cahnges will automattically affect all child components via props. 
+
+    //So one needs to change the code to one thing - the state - and the UI will update.
+
+    //Props vs state
+
+    //Props: arguments to a function --> when you create a component inside of React and want to render it, you're going to pass it the props you want to give to it. 
+
+    // initial count: 0, 
+
+    // Consider two example: One has a title and subtitle to display, counter that counts something. 
+
+    // Within the counter function, the current count is handled within the state so we would pass in the initial count through the props and configure (i.e. increment decrement) by using state. The reason being is that the value of the counter function changes periodically and we want to store that change (through state)
+
+    // As one will presume, the current count is handled inside of the state hence we pass in the initial count through props and set the state to the props. 
+    
+    // This gives you an understanding that state is inside of the component whereas props is passed into the component. 
+
+    // In order to display the title and subtitle, we will use props because what we need our function or component to take is the props. Component in this case consists of the title and subtitle so we pass through the props. Application is notified if the rpops alters
+        
+    // State: it is inside of the component whereas props pass into a component. 
+
+    // When one changes the state inside of an application, it will re-render that particular section whereas props can't be changed from the inside. 
+
+    // State is there for when one needs to re-render and update an application based on what the user has done so it, again, is stored in the state. Props are useful for the displaying of information inside of component. 
+    
+    // In the example of the counter function, the current count is handled inside of the state. We pass in the initial count through props and we set the state to the props. 
+        
+    // When one created a class, the things that are passed to the constructor are the things that are your props for a component in React. 
+
+    // If one is handling a piece of information inside of a component and it only, then one should use state whereas if the info will be handled outside then, pass it in via props.   
+
+    // If the information is static and not going to change, (i.e display section), then use props. 
+
+
+    //State is private and fully controlled by the props. 
 
 
 class MyClass extends React.Component 
@@ -144,6 +182,7 @@ class Clock extends React.Component {
 //Consider a flower shop with an internal tracking system that measures how many roses a store has at a given time frame. This will work properly if there is only 1 store that has access to the code but if there is another store that opens a second branch, then it won't work {find out why it doesn't work @Shreeja}
 
 import React from 'react';
+import { lightskyblue } from 'color-name';
 
 Class FlowerShop extends React.Component {
   
@@ -174,6 +213,8 @@ Class FlowerShop extends React.Component {
   }
   
 }
+
+//Clock, in the code below, doesn't set up its own timer and update itself every second.
 
 class Clock extends React.Component {
     constructor(props) {
@@ -208,6 +249,8 @@ class Clock extends React.Component {
       this.state = {date: new Date()};
     }
   
+//componentDidMount() method runs after the component output has been rendered to the DOM hence it's a good place to set up a timer. 
+
     componentDidMount() {
     }
   
@@ -251,6 +294,9 @@ class Clock extends React.Component {
       this.state = {date: new Date()};
     }
   
+
+//the componentDidMount() saves the timerID on this.timerID
+
     componentDidMount() {
       this.timerID = setInterval(
         () => this.tick(),
@@ -258,10 +304,14 @@ class Clock extends React.Component {
       );
     }
   
+
+//the componentWillUnmount() clears the timerID from the DOM to free up space on the application so that it can run faster. 
     componentWillUnmount() {
       clearInterval(this.timerID);
     }
   
+//the tick() method is ran every second after an instance of it is called from the componentDidMount() -- check componentDidMount() code. 
+//this.setState() schedules updates to the component local state: I've defined this below the code check for reference. 
     tick() {
       this.setState({
         date: new Date()
@@ -283,4 +333,131 @@ class Clock extends React.Component {
     document.getElementById('root')
   );
 
+
+
+
+//For the above code, this is step by step on what happens:
+
+//1. React calls the constructor of the Clock Component. 
+
+    constructor(props) {
+      super(props);
+      this.state = {date: new Date()};
+    }
+
+    //The above code creates an object which looks like the following:
+
+      //{date; 060220}
+
+//2. Render method is now called. This helps React understand what should be displayed on the screen. 
+
+      render() {
+        return (
+          <div>
+            <h1>Hello, world!</h1>
+            <h2>It is {this.state.date.toLocaleTimeString()}.</h2>
+          </div>
+        );
+      }
+
+//3. After the clock output is inserted to the DOM, React calls the componentDidMount()
+
+      componentDidMount() {
+        this.timerID = setInterval(
+          () => this.tick(),
+          1000
+        );
+      }
+
+      //The above code: clock component asks for the browser to set up a timer to call the tick method once every second. 
+
+//4. Now, the tick method is called every second. 
+
+      tick() {
+        this.setState({
+          date: new Date()
+        });
+      }
+
+
+//4.a. Clock component schedules a UI update by calling setState() method due to which React understand that a change has been made. Due to this, the render method is called again and it alters the UI. 
+
+//The value of this.state.date alters. 
+
+//5. If the Clock is removed from the DOM, React calls the componentWillUnmount() so the timer is stopped. 
+
+//How to use setState() properly?
+
+//1.
+
+this.state.comment = 'Hello'; //This WILL NOT re-render a component. 
+
+this.setState({comment: "Hello"}); //This will re-render a component. 
+
+//this.state can ONLY be assigned in the constructor. 
+
+//2.
+
+//Consider that this.props and this.state are update asynchronously hence one shouldn't rely on their values for calculating the next state. 
+
+//The below code will fail to the update the counter as the props is not stored. Refer to the beginning of this document if you don't know what i'm referring to. 
+
+this.setState({
+  counter: this.state.counter + this.props.increment,
+});
+
+//The above code requires a second form of setState() that accepts a function rather than an object. The object may fail to update the counter becaus this.props and this.state is updated asynchrously. The above code cointains this.state and this.props into one argument. 
+
+//The function below will receive the previous state as the first argument and the props at the time the update is applied as the second argument.
+
+this.setState((state, props) => ({
+  counter: state.counter + props.increment
+}));
+
+
+//3. Research tomorrow  @Shreejal
+
+//State is called local or encapsulated because it's not accessible to any component other than the othe that owns and sets it. 
+
+
+//4. The data flows downwards in unidirectional fashion. 
+
+
+//The below example shows a component passsing it's state down as props to a child component given what was stated above. 
+
+<FormattedDate date={this.state.date} />
+
+//FormattedDate would be rceived in it's props parameter and wouldn't know if it came from the Clock's state, props or was typed by hand. It ONLY KNOWS THAT IT WAS PASSED AS A PROPS. 
+
+function FormattedDate(props) {
+  return <h2>It is {props.date.toLocaleTimeString()}.</h2>;
+}
+
+
+//Any state is owned by a specific component and any data or UI derived from that state can only affect components below them in the tree 
+
+
+//The below example shows that all components are truly isolated. 
+
+function App() {
+  return (
+    <div>
+      <Clock />
+      <Clock />
+      <Clock />
+    </div>
+  );
+}
+
+ReactDOM.render(
+  <App />,
+  document.getElementById('root')
+);
+
+
+
+      
+
+
+    
   
