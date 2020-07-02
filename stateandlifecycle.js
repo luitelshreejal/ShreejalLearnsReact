@@ -417,7 +417,95 @@ this.setState((state, props) => ({
 }));
 
 
-//3. Research tomorrow  @Shreejal
+//3. State Updates are merged  
+
+//When you call setState(), React merges the object you provide into the current state. 
+    //https://medium.com/@imrobinkim/how-state-updates-are-merged-in-react-e07fc669fec2
+    //Again, State allows for React components to modify their output in response to the user inputs. 
+            //States shouldn't direclty be modified because the manual mutation can be overwritten by an asynchronoud function. 
+            //hence setState() is used.
+
+      class App extends React.Component {
+        constructor(){
+          super()
+          this.state = {
+            name: "Bob",
+            isLoggedIn: false
+          }
+        }
+
+        handleLogIn = () => {
+          this.setState({isLoggedIn: true})
+        } //a logging in action will trigger the setState to update isLoggedIn object. 
+
+
+        //Consider that shallow mergining only merges things on the first level hence when using setState() on state objects with nested structures, we have to be careful Look below. 
+      }
+
+      class App extends React.Component {
+        constructor(){
+          super()
+          this.state = {
+            name: "Bob",
+            isLoggedIn: false,
+            address: {
+              street: "123 Fulton Way",
+              city: null
+            }
+          }
+        }
+
+        handleLogIn = () => {
+          this.setState({
+            address: {
+              city: "New York City" //Hence one might try to update address.city in object like this. 
+              //However below is what it does. 
+              //name: "Bob",
+              //isLoggedIn: false,
+              //address: {
+                // city: "New York City"
+              // } //WE HAVE NOW LOST address.city. 
+            }
+          })
+        } 
+
+      }
+
+      class App extends React.Component {
+        constructor(){
+          super()
+          this.state = {
+            name: "Bob",
+            isLoggedIn: false,
+            address: {
+              street: "123 Fulton Way",
+              city: null
+            }
+          }
+        }
+
+        handleLogIn = () => {
+          this.setState({
+            address: {
+              ...this.state.address, //keep something a constant. 
+              city: "New York City" 
+              //Below is what setState() prodices (correct). 
+              //name: "Bob",
+              //isLoggedIn: false,
+              //address: {
+                //  street: "123 Fulton Way",
+                //  city: "New York City"
+              // } //WE HAVE NOW LOST address.city. 
+            }
+          })
+        } 
+
+      }
+
+
+
+
+
 
 //State is called local or encapsulated because it's not accessible to any component other than the othe that owns and sets it. 
 
