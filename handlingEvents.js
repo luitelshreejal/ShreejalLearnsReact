@@ -150,7 +150,135 @@ class Toggle extends React.Component {
 
         //It calls the bind() method of the runner.run() method and pass in the flyer object as the first argument and 20 as the second argument. run becomes a function and it's invoked. 
 
+        //In React, you will notice that the bind function is similar. 
+
     //Now let's go back to our original problem! //We were looking for the purpose of passing in (this) to the bind right?
+
+            //Consider the example below where this.handleClick is removed from the constructor function. 
+            //https://www.freecodecamp.org/news/this-is-why-we-need-to-bind-event-handlers-in-class-components-in-react-f7ea1a6f93eb/
+            class Foo extends React.Component{
+              constructor( props ){
+                super( props );
+              }
+                
+              handleClick(event){
+                console.log(this); // 'this' is undefined
+              }
+                
+              render(){
+                return (
+                  <button type="button" onClick={this.handleClick}>
+                    Click Me
+                  </button>
+                );
+              }
+            }
+            
+            ReactDOM.render(
+              <Foo />,
+              document.getElementById("app")
+            );
+
+            //If the above code is ran, then "undefined" will be printed to the console value: it's because of the way THIS binding works. 
+            
+            //Default Binding. 
+
+            function display(){
+              console.log(this); // 'this' will point to the global object
+             }
+             
+             display(); 
+
+             //The above is considered as a plain function call hence the this value is undefined in strict mode whereas this can point to the global object in non-strict mode. 
+
+             var obj = {
+              name: 'Saurabh',
+              display: function(){
+                console.log(this.name); // 'this' points to obj
+               }
+             };
+             
+             obj.display(); // Saurabh 
+
+             var name = "uh oh! global";
+              var outerDisplay = obj.display;
+              outerDisplay(); // uh oh! global
+
+            //In the above example (default binding), a context object is not specified henc eit points to the global object or undefined if in strict mode.
+
+
+
+            //The goal of a bind function is for the context object to point to the global object. The context object in our previous example is 'this' keyword. 
+
+            var obj = {
+              name: "Hello",
+              display: function() {
+                console.log(this.name);
+              }
+            };
+
+            obj.display() //Prints "Hello" as the value is set to the global object. 
+
+            var name = "uh oh";
+            var outerDisplay = obj.display;
+
+            outerDisplay(); // Prints "uh oh"
+            //However, instead of pointing to the local object, we want to point to the global object ("Hello")
+
+            setTimeout(obj.display, 1000) //Prints "uh oh" ever 1 second. 
+
+            var name = "uh oh";
+
+            obj.display = obj.display.bind(obj);
+            var outerDisplay = obj.display;
+            outerDisplay();
+
+            //results in the printing of "hello" as now the bind allows for it to set to the global object -- not the prototypes. 
+
+            //Similarly,,
+
+            class Foo {
+              constructor(name){
+                this.name = name;
+
+              }
+              display() {
+                console.log("this.name")
+              }
+            }
+
+            var foo = new Foo("hello");
+
+            foo.display()// //Prints "Hello"
+
+            var display = foo.display() 
+
+            display() //Type error: 'this' keyword is undefined. 
+
+            class Foo {
+              constructor(name){
+              this.display = this.display.bind(this);
+              } 
+              display() {
+                console.log(this.name);
+              }
+            }
+
+            var foo = new Foo("Hello");
+            foo.display();
+            var display = foo.display;
+            display(); //Prints Hello
+
+            //In the above example the global object is pointed at. 
+
+
+
+
+
+
+
+
+
     
     
 
