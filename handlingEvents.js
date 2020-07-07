@@ -344,20 +344,115 @@ class Toggle extends React.Component {
         //Passing Arguments to Event Handlers. 
         
 
-        //Within a loop, it's common to pass in an extra parameter to a event handler. If the id is the row ID, either of the following below would work: 
+        //Within a loop, it's common to pass in an extra parameter to a event handler. 
+        //If the id is the row ID, either of the following below would work: 
 
         <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
         <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
 
+
+        //Event Handler Continutation
+
+        let message = "Hey there!";
+        class RandomFunction extends React.Component {
+          render() {
+            return <button onClick={this.displayMessage.bind(this,
+            message)}>Press to hear your message.</button>;
+          }
+          
+          displayMessage(message) {
+            console.log(message)
+          }
+        }
+
+        //We create our own message and store it in message within the global scope. 
+        //The onClick function is added which activates whenever clicked. 
+
+        //In order to reference the function, we pass in the message as the parameter where we use this.eventhandler.bind(this, parameters). 
+
+        let message = "Whats you?";
+
+        class Message extends React.Component{
+          render() {
+            displayMessage(message) {
+              console.log(message); //Notice that in the previous examples parameters weren't taken in as inputs, however, here they are. 
+            }
+
+            return () {
+              <div>
+              <button onCLick={this.displayMessage}</button>
+              
+              </div>
+            }
+          }
+        }
+
         
 
             
+// Create a project where everytime a button is clicked, it alerts "hello"
+
+
+class MessageDisplayed extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {message: "Hello World"};
+    this.DisplayMessage = this.DisplayMessage.bind(this);
+  }
+  
+  DisplayMessage() {
+      alert("hello");
+    }
+  
+  render(){
+    
+    
+    return (
+      <button onClick={this.DisplayMessage}><h1>{this.state.message}</h1></button>
+    )
+  }
+}
 
 
 
+ReactDOM.render(
+  <MessageDisplayed />,
+  document.getElementById("root")
+);
+
+
+const message2 = "Hello Worlds" 
+
+class MessageDisplayed extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {message: " Hello World"};
+    this.DisplayMessage = this.DisplayMessage.bind(this);
+    this.msg2 = "Hello"
+  }
+  
+  DisplayMessage() {
+    this.setState(state => ({
+      //How can I insert more "Hello World buttons everytime it's clicked?"
+      message: this.state.message + message2
+    }))
+  }
+  
+  render(){
+    
+    
+    return (
+      <button onClick={this.DisplayMessage}><h1>{this.state.message}</h1></button>
+    )
+  }
+}
 
 
 
+ReactDOM.render(
+  <MessageDisplayed />,
+  document.getElementById("root")
+);
 
 
 
