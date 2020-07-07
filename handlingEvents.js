@@ -269,7 +269,92 @@ class Toggle extends React.Component {
             var display = foo.display;
             display(); //Prints Hello
 
-            //In the above example the global object is pointed at. 
+            //.bind() allows for any varialble to store the properties of a global object and when called on it renders it as a built-in function as demonstrated by the two previous examples.
+            
+            class Toggle extends React.Component {
+              constructor(props) {
+                super(props);
+                this.state = {isToggleOn: true};
+            
+                // This binding is necessary to make `this` work in the callback - this.state.isToggleOn ? 'ON' : 'OFF' is passed as the callback! 
+                this.handleClick = this.handleClick.bind(this);
+              }
+            
+              handleClick() {
+                this.setState(state => ({
+                  isToggleOn: !state.isToggleOn
+                }));
+              }
+            
+              render() {
+                return (
+                  <button onClick={this.handleClick}>
+                    {this.state.isToggleOn ? 'ON' : 'OFF'}
+                  </button>
+                );
+              }
+            }
+            
+            ReactDOM.render(
+              <Toggle />,
+              document.getElementById('root')
+            );
+
+                //What does this.setState() take in as a parameter?
+
+                //this.setState() takes in a function as it's parameter. When a function is passed, React will call it with the current at-call-time current state and expect you to return an Object to merge into state. 
+
+                // assuming this.state = { value: 0 };
+                this.setState((state) => ({ value: state.value + 1}));
+            
+
+            //Here is the order in which the class Toggle works. 
+
+            //1. render() passes in this.handleClick as the function. 
+            //2. //this.handleClick takes in   {this.state.isToggleOn ? 'ON' : 'OFF'} as the constructor this. 
+            //3. handleClick() is then called. The current state is true as declared in construtor(props). Truth is equivalent to the button "on"
+                //https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Conditional_Operator
+                //In the conditional ternary operation there are three parameters. 
+                //A condition is followed by a question mark (?) and consists of the true and false declrations as shown below.
+                function getFee(isMember) {
+                  return (isMember ? '$2.00' : '$10.00');
+                }
+                
+                console.log(getFee(true));
+                // expected output: "$2.00"
+            //4. When the handleClick is pressed, the opposite state is then altered. 
+
+            //If you refer to a method without () after it, onClick={this.handleClick}, you should bind that method in a constructor function. 
+            
+
+            //If you don't like the bind method, you can call it like the below. 
+            class LoggingButton extends React.Component {
+              handleClick = () => {
+                console.log("this is", this);
+              }
+              render() {
+                return (
+                  <button onClick={this.handleClick}>
+                  Click me! 
+                  </button>
+                )
+              }
+            }
+
+        //Passing Arguments to Event Handlers. 
+        
+
+        //Within a loop, it's common to pass in an extra parameter to a event handler. If the id is the row ID, either of the following below would work: 
+
+        <button onClick={(e) => this.deleteRow(id, e)}>Delete Row</button>
+        <button onClick={this.deleteRow.bind(this, id)}>Delete Row</button>
+
+        
+
+            
+
+
+
 
 
 
