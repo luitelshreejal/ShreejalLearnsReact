@@ -264,3 +264,17 @@ ReactDOM.render(
   <Page />,
   document.getElementById('root')
 );
+
+
+//How does the code above work?
+
+
+//render() within the class Page is first called!
+  //Within the render() we notice that the current state of the "showWarning" object is passed into the function WarningBanner() which is the boolean value true. 
+    //Notice that on the first line, we say if (!props.warn) meaning that if the (props.false) --> return "nothing"
+    //However, in the case that it's true display the "Warning!" tag. 
+
+  //The button onclick displays the current state of the handleToggleClick() which shows "Hide" (when it's true) or "Show" (when its false).
+    //Once the button is clicked through the function handleToggleClick() the value respectively changes.
+    
+    
