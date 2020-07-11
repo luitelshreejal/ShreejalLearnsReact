@@ -212,3 +212,90 @@ function Blog(props) {
     document.getElementById('root')
   );
 
+
+  //How does the function above work?
+
+  //Firstly the ReactDOM.render() is called which passes {posts} as a prop to the function Blog. 
+    //posts consists of the id, title, and content as an object. 
+  
+    //The function Blog() has the variable sidebar which maps the object in the const props as a list with the key post.id and post.title hence Hello World is displayed. 
+
+    //Next, the const content is declared which takes in the items from post and retrieves the id value and in h3 length adds the post.title
+      //post title "Hello World" and 'Welco0me to learning React!' on the screen -- so forth. 
+
+    //The return () returns the {sidebar} (constant) and {content} constant altogether. 
+
+    function Blog(props) {
+      const sidebar = (
+        <ul>
+          {props.posts.map((post) =>
+            <li key={post.id}>
+              {post.title}
+            </li>
+          )}
+        </ul>
+      );
+
+  //The above does the below:
+      //<li>Hello World</li>
+      //<li>Installation</li>
+
+    
+      function Blog(props) {
+        const sidebar = (
+          <ul>
+            {props.posts.map((post) =>
+              <li key={post.id}>
+                {post.title}
+              </li>
+            )}
+          </ul>
+        );
+
+    //The above code does the below
+
+    // <h3>Hello World</h3>
+    // <p>Welcome to learning React.<p>
+    // <h3>...</h3>
+    // <p>You can install React from npm.<p>
+
+
+    const content = posts.map((post) =>
+    <Post
+      key={post.id}
+      id={post.id}
+      title={post.title} />
+    );
+
+    //In the example above, the Post component can read props.id but not props.key. 
+
+    //Keys serve as a hint to React but they don't get passed to the components. 
+
+    function NumberList(props) {
+      const numbers = props.numbers;
+      const listItems = numbers.map((number) =>
+        <ListItem key={number.toString()}
+                  value={number} />
+      );
+      return (
+        <ul>
+          {listItems}
+        </ul>
+      );
+    }
+
+    //Notice that in the examples above we declared a separate listItems variable and included it in the JSX. 
+
+    //Given that JSX allows embedding any expression, in curly braces, we can inline the map result. 
+
+    function NumberList(props) {
+      const numbers = props.numbers;
+      return (
+        <ul>
+          {numbers.map((number) =>
+            <ListItem key={number.toString()}
+                      value={number} />
+          )}
+        </ul>
+      );
+    }
