@@ -77,6 +77,15 @@ class NameForm extends React.Component {
 
     //The input's value is always driven by the React.state.
 
+
+          //What is event.target?
+
+          //It's a built in Web API property that returns which DOM element triggered the event. 
+
+          //In the above example the DOM event that triggered it was the submit button. 
+
+
+
 // The textarea Tag
 
 //The textarea element defines its text by its children. WITHIN HTML
@@ -236,11 +245,55 @@ class Reservation extends React.Component {
     onChange={this.handleInputChange} />
 </label>
 
-//Every time the value is changed for the above then, setState() renders it automatically through the onChange attribute. 
+//The prefilled values for the above code is:
 
-//The onChange attribute calls the handleInputChange funciton
+    //isGoing: true --> form of a checkbox (hence checked);
+    //numberOfGuests: 2 --> form of a textbox. 
 
-const value = target.name === 'isGoing' ? target.checked : target.value;
+//Within the below function of the class, it comments out what each does. 
 
-// when the target is checked it's considered true (isGoing) and when unchecked
+handleInputChange(event) {
+  const target = event.target; //known as event pooling within synthetic events (legal in JS).
+  //if target.name is equal to "isGoing"  then it will 
+  //assign value to target.checked otherwise, it will assign target.value to "value".
 
+  const value = target.name === 'isGoing' ? target.checked : target.value; 
+
+
+  //saves the input name below: binary options --> "isGoing" or "numberOfGuests". 
+  const name = target.name;
+
+  this.setState({
+    [name]: value
+    // The value is going to be altered through this code. 
+    //The reason that [name] is like this is because of the computer property names syntax (it can be altered; it has a binary set of options). 
+  });
+}
+
+////////////////////////////////////////////////////////////////////////////////////////////////////// CONTROLLED COMPONENTS BELOW
+
+
+//When one sets the text value without state and passes it in as a props, it is uneditable! 
+ReactDOM.render(<input value="hi" />, mountNode);
+
+
+//In order to edit the value at some point, one can change it to null or undefined. 
+
+
+ReactDOM.render(<input value="hi" />, mountNode);
+
+setTimeout(function() {
+  ReactDOM.render(<input value={null} />, mountNode);
+}, 4000);
+
+//The above code allows one to edit the tag after 4 seconds.
+
+
+//Within controlled components, form data is handled by a React component and an alternative is uncontrolled component where the form data will be handled by the DOM. 
+
+
+//In uncontrolled component, it is easier to integrate React and non-React code as it keeps the source of "truth" in the DOM. 
+
+//Read more below
+
+// https://reactjs.org/docs/uncontrolled-components.html
